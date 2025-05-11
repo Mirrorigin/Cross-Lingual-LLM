@@ -1,0 +1,7 @@
+raw_data/
+tokens/
+results/
+w2v_models/
+cache/
+.idea/
+__pycache__/
