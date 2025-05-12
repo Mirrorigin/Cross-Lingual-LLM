@@ -17,7 +17,7 @@ nltk.download("stopwords")
 en_stopwords = set(stopwords.words("english"))
 
 # Load Chinese stopwords
-zh_stopwords_path = "zh_stopwords.txt"
+zh_stopwords_path = "../zh_stopwords.txt"
 with open(zh_stopwords_path, "r", encoding="utf-8") as f:
     zh_stopwords = set([line.strip() for line in f if line.strip()])
 
@@ -183,8 +183,8 @@ def main():
     print("Preprocessing raw data and splitting...")
 
     # Load and clean raw data
-    imdb_df = load_imdb("raw_data/IMDB_Dataset.csv", verbose=VERBOSE)
-    douban_df = load_douban("raw_data/Douban_Dataset.csv", verbose=VERBOSE)
+    imdb_df = load_imdb("../raw_data/IMDB_Dataset.csv", verbose=VERBOSE)
+    douban_df = load_douban("../raw_data/Douban_Dataset.csv", verbose=VERBOSE)
 
     # Balance Dataset
     pos = douban_df[douban_df["label"] == 1]
@@ -206,16 +206,16 @@ def main():
     douban_df, _ = train_test_split(douban_df, train_size=len(imdb_df), stratify=douban_df["label"], random_state=42)
 
     # Split and save csv (Basic Cleaned raw text, which can be fed into bert)
-    split_and_save_dataset(imdb_df, "raw_data/splits", prefix="imdb_", random_state=42, verbose=True)
-    split_and_save_dataset(douban_df, "raw_data/splits", prefix="douban_", random_state=42, verbose=True)
+    split_and_save_dataset(imdb_df, "../raw_data/splits", prefix="imdb_", random_state=42, verbose=True)
+    split_and_save_dataset(douban_df, "../raw_data/splits", prefix="douban_", random_state=42, verbose=True)
 
     # Load Splits
-    imdb_train = pd.read_csv("raw_data/splits/imdb_train.csv")
-    imdb_dev = pd.read_csv("raw_data/splits/imdb_dev.csv")
-    imdb_test = pd.read_csv("raw_data/splits/imdb_test.csv")
-    douban_train = pd.read_csv("raw_data/splits/douban_train.csv")
-    douban_dev = pd.read_csv("raw_data/splits/douban_dev.csv")
-    douban_test = pd.read_csv("raw_data/splits/douban_test.csv")
+    imdb_train = pd.read_csv("../raw_data/splits/imdb_train.csv")
+    imdb_dev = pd.read_csv("../raw_data/splits/imdb_dev.csv")
+    imdb_test = pd.read_csv("../raw_data/splits/imdb_test.csv")
+    douban_train = pd.read_csv("../raw_data/splits/douban_train.csv")
+    douban_dev = pd.read_csv("../raw_data/splits/douban_dev.csv")
+    douban_test = pd.read_csv("../raw_data/splits/douban_test.csv")
 
     # Deep Clean: Remove Stopwords
     imdb_train = clean_dataset(imdb_train, language="en", verbose=VERBOSE)
@@ -233,12 +233,12 @@ def main():
     douban_dev_labels = douban_dev["label"].tolist()
     douban_test_labels = douban_test["label"].tolist()
 
-    save_pickle(imdb_train_labels, "raw_data/labels/imdb_train_labels.pkl")
-    save_pickle(imdb_dev_labels, "raw_data/labels/imdb_dev_labels.pkl")
-    save_pickle(imdb_test_labels, "raw_data/labels/imdb_test_labels.pkl")
-    save_pickle(douban_train_labels, "raw_data/labels/douban_train_labels.pkl")
-    save_pickle(douban_dev_labels, "raw_data/labels/douban_dev_labels.pkl")
-    save_pickle(douban_test_labels, "raw_data/labels/douban_test_labels.pkl")
+    save_pickle(imdb_train_labels, "../raw_data/labels/imdb_train_labels.pkl")
+    save_pickle(imdb_dev_labels, "../raw_data/labels/imdb_dev_labels.pkl")
+    save_pickle(imdb_test_labels, "../raw_data/labels/imdb_test_labels.pkl")
+    save_pickle(douban_train_labels, "../raw_data/labels/douban_train_labels.pkl")
+    save_pickle(douban_dev_labels, "../raw_data/labels/douban_dev_labels.pkl")
+    save_pickle(douban_test_labels, "../raw_data/labels/douban_test_labels.pkl")
 
     # Tokenized at sentence level
     imdb_sentences_train = [text.split() for text in imdb_train["review"]]
@@ -254,15 +254,15 @@ def main():
     douban_tokens_train = [token for sent in douban_sentences_train for token in sent]
 
     # Save tokens
-    save_pickle(imdb_tokens_train, "tokens/zipf/imdb_tokens_train.pkl")
-    save_pickle(douban_tokens_train, "tokens/zipf/douban_tokens_train.pkl")
+    save_pickle(imdb_tokens_train, "../tokens/zipf/imdb_tokens_train.pkl")
+    save_pickle(douban_tokens_train, "../tokens/zipf/douban_tokens_train.pkl")
 
-    save_pickle(imdb_sentences_train, "tokens/sentences/imdb_sentences_train.pkl")
-    save_pickle(imdb_sentences_dev, "tokens/sentences/imdb_sentences_dev.pkl")
-    save_pickle(imdb_sentences_test, "tokens/sentences/imdb_sentences_test.pkl")
-    save_pickle(douban_sentences_train, "tokens/sentences/douban_sentences_train.pkl")
-    save_pickle(douban_sentences_dev, "tokens/sentences/douban_sentences_dev.pkl")
-    save_pickle(douban_sentences_test, "tokens/sentences/douban_sentences_test.pkl")
+    save_pickle(imdb_sentences_train, "../tokens/sentences/imdb_sentences_train.pkl")
+    save_pickle(imdb_sentences_dev, "../tokens/sentences/imdb_sentences_dev.pkl")
+    save_pickle(imdb_sentences_test, "../tokens/sentences/imdb_sentences_test.pkl")
+    save_pickle(douban_sentences_train, "../tokens/sentences/douban_sentences_train.pkl")
+    save_pickle(douban_sentences_dev, "../tokens/sentences/douban_sentences_dev.pkl")
+    save_pickle(douban_sentences_test, "../tokens/sentences/douban_sentences_test.pkl")
 
 if __name__ == "__main__":
     main()

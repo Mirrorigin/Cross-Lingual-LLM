@@ -3,7 +3,7 @@ import pandas as pd
 
 # ==================== Check Raw Data ====================
 # Load data, convert all empty string into NaN
-df = pd.read_csv("raw_data/Douban_Dataset.csv", na_values=["", " ", "null", "NA", "nan"])
+df = pd.read_csv("../raw_data/Douban_Dataset.csv", na_values=["", " ", "null", "NA", "nan"])
 
 print("Original Shape:", df.shape)
 print("RATING Uniques", df["RATING"].unique())

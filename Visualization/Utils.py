@@ -80,3 +80,17 @@ def plot_training_curves(train_losses, val_accuracies, epochs, name="IMDB", save
     print(f"[Saved] Validation accuracy curve → {save_acc_path}")
     plt.show()
     plt.close()
+
+# Define a function to plot a specific metrics
+def plot_metrics(file, metric_key, ylabel, max_epoch=100):
+    plt.figure(figsize=(10, 6))
+    for model_name, metrics in file.items():
+        if metric_key in metrics:
+            plt.plot(metrics[metric_key][:max_epoch], label=model_name)
+    plt.xlabel("Epoch")
+    plt.ylabel(ylabel)
+    plt.title(f"{ylabel} Comparison Across Models")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()

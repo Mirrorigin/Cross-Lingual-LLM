@@ -1,11 +1,9 @@
-import os
 from gensim.models import Word2Vec
-from CustomizedDataLoader import load_split_raw
-from Preprocess import save_pickle, load_pickle
-from TrainingModel import *
+from DataHandler.Preprocess import save_pickle, load_pickle
+from Pipeline import *
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation as SklearnLDA
-from FigurePlot import *
+from Visualization.Utils import *
 
 # === Parameters ===
 # Set this to True if already train the models
@@ -25,25 +23,25 @@ BATCH_SIZE = 32
 print("Using existing preprocessed split data...")
 
 # Load the stored labels to avoid re-extracting them
-imdb_train_labels = load_pickle("raw_data/labels/imdb_train_labels.pkl")
-imdb_dev_labels = load_pickle("raw_data/labels/imdb_dev_labels.pkl")
-imdb_test_labels = load_pickle("raw_data/labels/imdb_test_labels.pkl")
+imdb_train_labels = load_pickle("../raw_data/labels/imdb_train_labels.pkl")
+imdb_dev_labels = load_pickle("../raw_data/labels/imdb_dev_labels.pkl")
+imdb_test_labels = load_pickle("../raw_data/labels/imdb_test_labels.pkl")
 
-douban_train_labels = load_pickle("raw_data/labels/douban_train_labels.pkl")
-douban_dev_labels = load_pickle("raw_data/labels/douban_dev_labels.pkl")
-douban_test_labels = load_pickle("raw_data/labels/douban_test_labels.pkl")
+douban_train_labels = load_pickle("../raw_data/labels/douban_train_labels.pkl")
+douban_dev_labels = load_pickle("../raw_data/labels/douban_dev_labels.pkl")
+douban_test_labels = load_pickle("../raw_data/labels/douban_test_labels.pkl")
 
 # Load saved tokenized results
 # Word level - flattened tokens from training dataset
-imdb_tokens_train = load_pickle(f"tokens/zipf/imdb_tokens_train.pkl")
-douban_tokens_train = load_pickle(f"tokens/zipf/douban_tokens_train.pkl")
+imdb_tokens_train = load_pickle(f"../tokens/zipf/imdb_tokens_train.pkl")
+douban_tokens_train = load_pickle(f"../tokens/zipf/douban_tokens_train.pkl")
 # Sentence level
-imdb_sentences_train = load_pickle(f"tokens/sentences/imdb_sentences_train.pkl")
-imdb_sentences_dev = load_pickle(f"tokens/sentences/imdb_sentences_dev.pkl")
-imdb_sentences_test = load_pickle(f"tokens/sentences/imdb_sentences_test.pkl")
-douban_sentences_train = load_pickle(f"tokens/sentences/douban_sentences_train.pkl")
-douban_sentences_dev = load_pickle(f"tokens/sentences/douban_sentences_dev.pkl")
-douban_sentences_test = load_pickle(f"tokens/sentences/douban_sentences_test.pkl")
+imdb_sentences_train = load_pickle(f"../tokens/sentences/imdb_sentences_train.pkl")
+imdb_sentences_dev = load_pickle(f"../tokens/sentences/imdb_sentences_dev.pkl")
+imdb_sentences_test = load_pickle(f"../tokens/sentences/imdb_sentences_test.pkl")
+douban_sentences_train = load_pickle(f"../tokens/sentences/douban_sentences_train.pkl")
+douban_sentences_dev = load_pickle(f"../tokens/sentences/douban_sentences_dev.pkl")
+douban_sentences_test = load_pickle(f"../tokens/sentences/douban_sentences_test.pkl")
 
 # Create mixed EN+ZH training/dev/test set
 # text
@@ -243,4 +241,4 @@ if LDA_CLASSIFY:
     all_metrics["Mixed_LDA"] = metrics_lda
 
 # Save for visulization
-save_pickle(all_metrics, "results/baseline_all_metrics.pkl")
+save_pickle(all_metrics, "../results/baseline_all_metrics.pkl")

@@ -2,8 +2,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from collections import defaultdict
 from sklearn.metrics import f1_score, accuracy_score
-from CustomizedDataLoader import *
-from FigurePlot import *
+from DataHandler.CustomizedDataLoader import *
+from Visualization.Utils import *
 from transformers import AutoModel, AutoConfig, BertModel
 from adapters import AutoAdapterModel, AdapterConfig
 from peft import get_peft_model, LoraConfig, TaskType
@@ -42,6 +42,10 @@ class BertClassifier(nn.Module):
                 for p in layer.parameters():
                     p.requires_grad = True
 
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        total_params = sum(p.numel() for p in self.parameters())
+        print(f"trainable params: {trainable_params} || all params: {total_params} || trainable%: {(trainable_params / total_params) * 100:.4f}%")
+
     def forward(self, input_ids, attention_mask, labels=None):
         output = self.bert(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
         cls = output.last_hidden_state[:, 0]      # Get [CLS] Vectors, [B, hidden_size]
@@ -66,6 +70,10 @@ class AdapterBertClassifier(nn.Module):
 
         hidden_size = self.bert.config.hidden_size
         self.classifier = SimpleClassifier(hidden_size, dropout_prob=0.1)
+
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        total_params = sum(p.numel() for p in self.parameters())
+        print(f"trainable params: {trainable_params} || all params: {total_params} || trainable%: {(trainable_params / total_params) * 100:.4f}%")
 
     def forward(self, input_ids, attention_mask, labels=None):
         output = self.bert.bert(
@@ -113,7 +121,11 @@ class LoRABertClassifier(nn.Module):
         hidden_size = cfg.hidden_size
         self.classifier = SimpleClassifier(hidden_size, dropout_prob)
 
-        self.bert.print_trainable_parameters()
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        total_params = sum(p.numel() for p in self.parameters())
+        print(f"trainable params: {trainable_params} || all params: {total_params} || trainable%: {(trainable_params / total_params) * 100:.4f}%")
+
+        # self.bert.print_trainable_parameters()
 
     def forward(self, input_ids, attention_mask, labels=None):
         output = self.bert(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
@@ -144,6 +156,8 @@ def train_model(model, dataloader, optimizer, criterion, device, *, timeit=False
 
         loss = criterion(logits, labels)
         loss.backward()
+        # 梯度裁剪操作 - 保持梯度方向不变，但缩小其长度：防止梯度爆炸
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
         total_loss += loss.item()
 
@@ -248,8 +262,11 @@ def run_classification(model, train_loader, dev_loader, test_loader=None,
     criterion = criterion or nn.CrossEntropyLoss()
     epochs = epoch or 5
 
+    # # EarlyStopping
+    # patience = 5
+    # no_improve_counter = 0
     best_f1 = 0.0
-    best_ckpt = os.path.join("results", f"{name}_best.pt")
+    best_ckpt = os.path.join("../results", f"{name}_best.pt")
 
     train_losses = []
     val_accuracies = []
@@ -268,8 +285,14 @@ def run_classification(model, train_loader, dev_loader, test_loader=None,
         # If F1 better, then save the model
         if val_f1 > best_f1:
             best_f1 = val_f1
+            # no_improve_counter = 0
             torch.save(model.state_dict(), best_ckpt)
             print(f"New best F1: {best_f1:.4f}, saved checkpoint to {best_ckpt}")
+        # else:
+        #     no_improve_counter += 1
+        #     if no_improve_counter >= patience:
+        #         print(f"[Early Stop] No improvement after {patience} epochs.")
+        #         break
 
         if (epochs > 10 and (epoch == 0 or (epoch+1) % 5  == 0)) or (epochs <= 10):
             print(f"Epoch {epoch + 1}/{epochs} "
@@ -294,5 +317,5 @@ def run_classification(model, train_loader, dev_loader, test_loader=None,
 
         results.update({"test_accuracy": test_acc, "test_f1": test_f1, "test_breakdown": test_grp})
 
-    plot_training_curves(train_losses, val_accuracies, epochs, name=name, save_dir="results")
+    plot_training_curves(train_losses, val_accuracies, epochs, name=name, save_dir="../results")
     return results

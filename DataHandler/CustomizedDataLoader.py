@@ -7,13 +7,13 @@ from transformers import AutoTokenizer, AutoModel
 
 def load_split_raw():
     # Use original texts (Uncleaned)
-    df_imdb_tr = pd.read_csv("raw_data/splits/imdb_train.csv")
-    df_imdb_dev = pd.read_csv("raw_data/splits/imdb_dev.csv")
-    df_imdb_te = pd.read_csv("raw_data/splits/imdb_test.csv")
+    df_imdb_tr = pd.read_csv("../raw_data/splits/imdb_train.csv")
+    df_imdb_dev = pd.read_csv("../raw_data/splits/imdb_dev.csv")
+    df_imdb_te = pd.read_csv("../raw_data/splits/imdb_test.csv")
 
-    df_douban_tr = pd.read_csv("raw_data/splits/douban_train.csv")
-    df_douban_dev = pd.read_csv("raw_data/splits/douban_dev.csv")
-    df_douban_te = pd.read_csv("raw_data/splits/douban_test.csv")
+    df_douban_tr = pd.read_csv("../raw_data/splits/douban_train.csv")
+    df_douban_dev = pd.read_csv("../raw_data/splits/douban_dev.csv")
+    df_douban_te = pd.read_csv("../raw_data/splits/douban_test.csv")
 
     # Mixed
     df_tr = pd.concat([df_imdb_tr, df_douban_tr], ignore_index=True)

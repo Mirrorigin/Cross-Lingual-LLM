@@ -2,18 +2,17 @@
 
 import os
 
-from adapters.methods.modeling import Adapter
 from torch.utils.data import DataLoader
 import torch.optim as optim
 from datasets import Dataset
-from CustomizedDataLoader import load_split_raw, tokenize_batch
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
-from Preprocess import save_pickle
-from TrainingModel import BertClassifier, LoRABertClassifier, AdapterBertClassifier, run_classification
+from DataHandler.CustomizedDataLoader import load_split_raw, tokenize_batch
+from transformers import AutoTokenizer
+from DataHandler.Preprocess import save_pickle
+from Pipeline import LoRABertClassifier, run_classification
 
 def main():
     model_name = "bert-base-multilingual-uncased"
-    out_dir = "results/finetune"
+    out_dir = "../results/finetune"
     batch_size = 32
 
     # Load mixed split
@@ -63,17 +62,13 @@ def main():
     # ========End Fine-tuning========
 
     # # ========Start LoRA Fine-tuning========
-    lora_model = LoRABertClassifier(lora_r=16, lora_alpha=32)
+    lora_model = LoRABertClassifier(model_name=model_name, lora_r=16, lora_alpha=32)
     lora_metrics = run_classification(
         model=lora_model,
         train_loader=train_loader,
         dev_loader=dev_loader,
         test_loader=test_loader,
-        optimizer=optim.AdamW(
-            filter(lambda p: p.requires_grad, lora_model.parameters()),
-            lr=3e-4,
-            weight_decay=0.0
-        ),
+        optimizer=optim.AdamW(lora_model.parameters(), lr=1e-4, weight_decay=0.01),
         epoch=100,
         name="Mixed_BERT_LoRA"
     )
