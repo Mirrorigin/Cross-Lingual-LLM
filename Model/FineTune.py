@@ -68,7 +68,7 @@ def main():
         train_loader=train_loader,
         dev_loader=dev_loader,
         test_loader=test_loader,
-        optimizer=optim.AdamW(lora_model.parameters(), lr=1e-4, weight_decay=0.01),
+        optimizer=optim.AdamW(lora_model.parameters(), lr=2e-5, weight_decay=0.01),
         epoch=100,
         name="Mixed_BERT_LoRA"
     )

@@ -19,7 +19,7 @@ if FINE_TUNING:
     # Define the directory containing all metric files
     out_dir = "../results/finetune"
     expected_files = {
-        "Partial Fine-tuning": "finetune_metrics.pkl",
+        "Standard Fine-tuning": "finetune_metrics.pkl",
         "LoRA": "lora_metrics.pkl",
         "Adapter": "adapter_metrics.pkl"
     }
