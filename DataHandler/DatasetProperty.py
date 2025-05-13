@@ -39,9 +39,9 @@ dataset_name = "douban"
 
 # Split data path
 split_paths = {
-    "train": Path(f"raw_data/splits/{dataset_name}_train.csv"),
-    "dev":   Path(f"raw_data/splits/{dataset_name}_dev.csv"),
-    "test":  Path(f"raw_data/splits/{dataset_name}_test.csv"),
+    "train": Path(f"../raw_data/splits/{dataset_name}_train.csv"),
+    "dev":   Path(f"../raw_data/splits/{dataset_name}_dev.csv"),
+    "test":  Path(f"../raw_data/splits/{dataset_name}_test.csv"),
 }
 
 rows = []
