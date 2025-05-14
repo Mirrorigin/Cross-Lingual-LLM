@@ -36,7 +36,7 @@ def plot_zipf(tokens1, tokens2, dataset_name1, dataset_name2, top_k=50000):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig("results/zipf_comparison.png", dpi=300, bbox_inches="tight")
+    plt.savefig("../Figures/zipf_comparison.png", dpi=300, bbox_inches="tight")
     plt.close()
     plt.show()
 
@@ -82,7 +82,7 @@ def plot_training_curves(train_losses, val_accuracies, epochs, name="IMDB", save
     plt.close()
 
 # Define a function to plot a specific metrics
-def plot_metrics(file, metric_key, ylabel, max_epoch=100):
+def plot_metrics(file, metric_key, ylabel, name, max_epoch=100):
     plt.figure(figsize=(10, 6))
     for model_name, metrics in file.items():
         if metric_key in metrics:
@@ -93,4 +93,5 @@ def plot_metrics(file, metric_key, ylabel, max_epoch=100):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
+    plt.savefig(f"../Figures/{name}_TrainingLoss.png", dpi=300, bbox_inches="tight")
     plt.show()

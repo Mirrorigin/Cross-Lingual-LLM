@@ -1,9 +1,9 @@
 import os
-from Utils import plot_metrics
+from plotting_funcs import plot_metrics
 import pickle
 
-BASELINE = False
-FINE_TUNING = False
+BASELINE = True
+FINE_TUNING = True
 
 if BASELINE:
     # Load the saved baseline metrics file
@@ -11,9 +11,7 @@ if BASELINE:
         all_metrics = pickle.load(f)
 
     # Plot each metric
-    plot_metrics(all_metrics, "train_losses", "Training Loss")
-    plot_metrics(all_metrics, "val_accuracies", "Validation Accuracy")
-    plot_metrics(all_metrics, "val_f1s", "Validation F1 Score")
+    plot_metrics(all_metrics, "train_losses", "Training Loss", "Basic")
 
 if FINE_TUNING:
     # Define the directory containing all metric files
@@ -35,5 +33,5 @@ if FINE_TUNING:
             print(f"Warning: {path} not found.")
 
     # Plot training loss comparison
-    plot_metrics(all_metrics, "train_losses", "Training Loss", max_epoch=30)
+    plot_metrics(all_metrics, "train_losses", "Training Loss", "FineTune")
 

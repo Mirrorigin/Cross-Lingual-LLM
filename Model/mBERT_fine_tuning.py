@@ -5,10 +5,10 @@ import os
 from torch.utils.data import DataLoader
 import torch.optim as optim
 from datasets import Dataset
-from DataHandler.CustomizedDataLoader import load_split_raw, tokenize_batch
+from DataHandler.data_loader import load_split_raw, tokenize_batch
 from transformers import AutoTokenizer
-from DataHandler.Preprocess import save_pickle
-from Pipeline import LoRABertClassifier, run_classification
+from DataHandler.data_preprocess import save_pickle
+from training_pipeline import LoRABertClassifier, run_classification
 
 def main():
     model_name = "bert-base-multilingual-uncased"

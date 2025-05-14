@@ -2,8 +2,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from collections import defaultdict
 from sklearn.metrics import f1_score, accuracy_score
-from DataHandler.CustomizedDataLoader import *
-from Visualization.Utils import *
+from DataHandler.data_loader import *
+from Visualization.plotting_funcs import *
 from transformers import AutoModel, AutoConfig, BertModel
 from adapters import AutoAdapterModel, AdapterConfig
 from peft import get_peft_model, LoraConfig, TaskType

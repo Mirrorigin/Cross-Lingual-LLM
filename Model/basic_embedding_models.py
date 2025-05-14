@@ -1,20 +1,20 @@
 from gensim.models import Word2Vec
-from DataHandler.Preprocess import save_pickle, load_pickle
-from Pipeline import *
+from DataHandler.data_preprocess import save_pickle, load_pickle
+from training_pipeline import *
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation as SklearnLDA
-from Visualization.Utils import *
+from Visualization.plotting_funcs import *
 
 # === Parameters ===
 # Set this to True if already train the models
-WORD2VEC = False
+WORD2VEC = True
 # Determine Classification model
 WORD2VEC_CLASSIFY = True
-BERT_CLASSIFY = True
-TFIDF_CLASSIFY = True
-LDA_CLASSIFY = True
+BERT_CLASSIFY = False
+TFIDF_CLASSIFY = False
+LDA_CLASSIFY = False
 # Set this to True to print details
-VERBOSE = True
+VERBOSE = False
 # Batch size
 BATCH_SIZE = 32
 
@@ -100,8 +100,8 @@ if WORD2VEC_CLASSIFY:
     print("Using features from wor2vec model, and then training a Classifier...")
     if WORD2VEC:
         print("Loading pre-trained w2v model...")
-        mixed_w2v_cbow = Word2Vec.load("w2v_models/mixed_cbow.model")
-        mixed_w2v_skip = Word2Vec.load("w2v_models/mixed_skipgram.model")
+        mixed_w2v_cbow = Word2Vec.load("../w2v_models/mixed_cbow.model")
+        mixed_w2v_skip = Word2Vec.load("../w2v_models/mixed_skipgram.model")
 
     else:
         print("Start Training w2v model...")
