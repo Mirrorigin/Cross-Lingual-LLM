@@ -9,12 +9,12 @@ from Visualization.plotting_funcs import *
 # Set this to True if already train the models
 WORD2VEC = True
 # Determine Classification model
-WORD2VEC_CLASSIFY = True
+WORD2VEC_CLASSIFY = False
 BERT_CLASSIFY = False
 TFIDF_CLASSIFY = False
 LDA_CLASSIFY = False
 # Set this to True to print details
-VERBOSE = False
+VERBOSE = True
 # Batch size
 BATCH_SIZE = 32
 
