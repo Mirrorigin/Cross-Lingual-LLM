@@ -6,7 +6,7 @@ FIND_MOST_FREQUENT_EXAMPLES = True
 
 if FIND_MOST_FREQUENT_EXAMPLES:
     # Load Txt File: Sample ID
-    file_path = "../FineTune_OutrageousExamples.txt"
+    file_path = "../OutrageousExamples_FineTune.txt"
     with open(file_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
 
@@ -37,7 +37,7 @@ for sid in sample_ids:
     print(f"Review: {row['review']}")
     print("-" * 60)
 
-# Output for "Base_OutrageousExamples.txt"
+# Output for "OutrageousExamples_Basic.txt"
 # """
 #      Sample ID  Count
 # 0        635      5
@@ -53,7 +53,7 @@ for sid in sample_ids:
 # 10      9306      5
 # """
 
-# Output for "FineTune_OutrageousExamples.txt"
+# Output for "OutrageousExamples_FineTune.txt"
 # """
 #       Sample ID  Count
 # 0         39      3

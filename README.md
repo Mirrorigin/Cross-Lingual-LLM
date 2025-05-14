@@ -30,7 +30,7 @@ This project explores sentiment classification on English and Chinese movie revi
 ### Classification Models
 - **Model/basic_embedding_models.py:** Runs baseline classification
 - **Model/basic_embedding_models.py:** Run fine-tuning models
-  - Set flags (e.g., `WORD2VEC_CLASSIFY = True`) in the script to toggle models:
+  - Set flags (e.g., `WORD2VEC_CLASSIFY = True`) in the script to toggle models
 
 ### Results Analysis
 - **Visualization/training_metrics.py:** Plot training losses
