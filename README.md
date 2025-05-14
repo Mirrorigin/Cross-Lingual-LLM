@@ -1,4 +1,4 @@
-# Cross-Lingual Sentiment Classification: IMDB & Douban
+# Cross-Lingual Sentiment Classification
 This project explores sentiment classification on English and Chinese movie reviews using both traditional NLP techniques and multilingual Transformer models. It compares classic feature extraction (Word2Vec, TF-IDF, LDA) with fine-tuning strategies for mBERT, including standard fine-tuning, LoRA, and Adapter modules.
 ## Prepare Dataset
 - [IMDB Dataset of 50K Movie Reviews](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews?resource=download)
@@ -20,7 +20,23 @@ This project explores sentiment classification on English and Chinese movie revi
 ├── Figures/
 ├── DataHandler/
 ├── Model/
-├── Visualization/
-├── TrainingModel.py
-└── Console.md / Final_Report.pdf
+└── Visualization/
 ```
+## Description
+### Preprocessing
+- **DataHandler/data_preprocess.py:** Clean, split and balance Dataset
+- **DataHandler/dataset_property.py:** Dataset Property
+
+### Classification Models
+- **Model/basic_embedding_models.py:** Runs baseline classification
+- **Model/basic_embedding_models.py:** Run fine-tuning models
+  - Set flags (e.g., `WORD2VEC_CLASSIFY = True`) in the script to toggle models:
+
+### Results Analysis
+- **Visualization/training_metrics.py:** Plot training losses
+- **Visualization/error_analysis.py:** Error Samples
+
+## Notice
+
+This is for Large Language Models course final project.
+

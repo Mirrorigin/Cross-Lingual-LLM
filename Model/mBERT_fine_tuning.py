@@ -8,7 +8,7 @@ from datasets import Dataset
 from DataHandler.data_loader import load_split_raw, tokenize_batch
 from transformers import AutoTokenizer
 from DataHandler.data_preprocess import save_pickle
-from training_pipeline import LoRABertClassifier, run_classification
+from training_pipeline import AdapterBertClassifier, BertClassifier, LoRABertClassifier, run_classification
 
 def main():
     model_name = "bert-base-multilingual-uncased"
@@ -47,18 +47,18 @@ def main():
 
     # ========Start Fine-tuning========
     # Use same model and pre-trained weights, run 5 epochs fine-tuning
-    # finetune_model = BertClassifier(model_name=model_name, unfreeze_last_n=2)
-    # # Load previous trained classifier parameters?
-    # finetune_metrics = run_classification(
-    #     model=finetune_model,
-    #     train_loader=train_loader,
-    #     dev_loader=dev_loader,
-    #     test_loader=test_loader,
-    #     optimizer=optim.AdamW(finetune_model.parameters(), lr=2e-5, weight_decay=0.01),
-    #     epoch=100,
-    #     name="Mixed_BERT_FineTune"
-    # )
-    # save_pickle(finetune_metrics, os.path.join(out_dir, "finetune_metrics.pkl"))
+    finetune_model = BertClassifier(model_name=model_name, unfreeze_last_n=2)
+    # Load previous trained classifier parameters?
+    finetune_metrics = run_classification(
+        model=finetune_model,
+        train_loader=train_loader,
+        dev_loader=dev_loader,
+        test_loader=test_loader,
+        optimizer=optim.AdamW(finetune_model.parameters(), lr=2e-5, weight_decay=0.01),
+        epoch=100,
+        name="Mixed_BERT_FineTune"
+    )
+    save_pickle(finetune_metrics, os.path.join(out_dir, "finetune_metrics.pkl"))
     # ========End Fine-tuning========
 
     # # ========Start LoRA Fine-tuning========
@@ -76,17 +76,17 @@ def main():
     # # ========End LoRA Fine-tuning========
 
     # ========Start Adapter Fine-tuning========
-    # adapter_model = AdapterBertClassifier(model_name=model_name, adapter_name="sentiment")
-    # adapter_metrics = run_classification(
-    #     model=adapter_model,
-    #     train_loader=train_loader,
-    #     dev_loader=dev_loader,
-    #     test_loader=test_loader,
-    #     optimizer=optim.AdamW(adapter_model.parameters(), lr=2e-5, weight_decay=0.01),
-    #     epoch=100,
-    #     name="Mixed_BERT_adapter"
-    # )
-    # save_pickle(adapter_metrics, os.path.join(out_dir, "adapter_metrics.pkl"))
+    adapter_model = AdapterBertClassifier(model_name=model_name, adapter_name="sentiment")
+    adapter_metrics = run_classification(
+        model=adapter_model,
+        train_loader=train_loader,
+        dev_loader=dev_loader,
+        test_loader=test_loader,
+        optimizer=optim.AdamW(adapter_model.parameters(), lr=2e-5, weight_decay=0.01),
+        epoch=100,
+        name="Mixed_BERT_adapter"
+    )
+    save_pickle(adapter_metrics, os.path.join(out_dir, "adapter_metrics.pkl"))
     # ========End LoRA Fine-tuning========
 
 
