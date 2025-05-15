@@ -22,13 +22,13 @@ This project explores sentiment classification on English and Chinese movie revi
 ├── Model/
 └── Visualization/
 ```
-## Description
+## Code Description
 ### Preprocessing
 - **DataHandler/data_preprocess.py:** Clean, split and balance Dataset
 - **DataHandler/dataset_property.py:** Dataset Property
 
 ### Classification Models
-- **Model/basic_embedding_models.py:** Runs baseline classification
+- **Model/basic_embedding_models.py:** Run baseline classification
 - **Model/basic_embedding_models.py:** Run fine-tuning models
   - Set flags (e.g., `WORD2VEC_CLASSIFY = True`) in the script to toggle models
 
@@ -38,5 +38,4 @@ This project explores sentiment classification on English and Chinese movie revi
 
 ## Notice
 
-This is for Large Language Models course final project.
-
+This is for Spring 2025 Large Language Models course final project.

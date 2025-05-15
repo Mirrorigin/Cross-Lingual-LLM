@@ -167,7 +167,7 @@ if BERT_CLASSIFY:
     bert_dev_loader = DataLoader(bert_dev_data, batch_size=BATCH_SIZE, shuffle=False)
     bert_test_loader = DataLoader(bert_test_data, batch_size=BATCH_SIZE, shuffle=False)
 
-    # BertDataset stores all CLS vectors in bert_train_data.embeddings，its shape=(N, hidden_size)
+    # BertDataset stores all CLS vectors in bert_train_data.embeddings, its shape=(N, hidden_size)
     bert_hidden_size = bert_train_data.embeddings.shape[1]
     bert_baseline_model = SimpleClassifier(input_dim=bert_hidden_size)
 

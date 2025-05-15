@@ -54,7 +54,7 @@ class Word2VecDataset(Dataset):
 
 class FeatureDataset(Dataset):
     def __init__(self, X, y, sources):
-        # X: numpy array or sparse matrix，y: list or array
+        # X: numpy array or sparse matrix, y: list or array
         self.X = torch.tensor(X.toarray() if hasattr(X, "toarray") else X, dtype=torch.float32)
         self.y = torch.tensor(y, dtype=torch.long)
         self.sources = sources
@@ -67,15 +67,17 @@ class FeatureDataset(Dataset):
             "source": self.sources[idx],
         }
 
-# BertDataset: 在初始化阶段一次性把所有样本跑过 BERT（with torch.no_grad()），把每条文本的 [CLS] 向量都缓存下来（self.embeddings
-# 后面的训练、验证、测试循环中，DataLoader 直接从这个缓存里 __getitem__ 出一个静态的向量，不再触碰 BERT，速度非常快。
-# 但这里我最开始犯了一个错误：只用来加载训练集，把 train 的所有 CLS 向量写进了 cache/bert_embs.pt。
-# 然后直接拿 train cache 的向量构造 dev/test 集，“读” train 的向量；打标签自然准不住，最后就只有 ~50% 的随机水平。
+# BertDataset: During initialization, all samples are passed through fixed mBERT (using torch.no_grad()), and the [CLS] vector for each text is cached in self.embeddings.
+# In the subsequent training, validation, and testing loops, the DataLoader retrieves static vectors directly from this cache via __getitem__, without touching BERT again, making it extremely fast!
+# But initially made a mistake: only loaded the training set, and saved all the training CLS vectors into cache/bert_embs.pt.
+# Then mistakenly constructed the dev/test sets using this training cache, and "read" training vectors as dev/test vec.
+# The labels didn’t align, so the results ended up at random guessing level—around ~50%.
 
-# freeze_bert=True 下的 BertClassifier: 虽然把 BERT 的参数都 requires_grad=False，避免梯度计算和反传，
-# 但在每个 batch 里，还是要把输入的 input_ids, attention_mask 喂给 BERT，执行一次完整的前向!
-# 即使是在 with torch.no_grad() 里，这部分计算开销跟正常 fine‑tune 是一样的 —— 只是多了 “不算梯度” 的开销优化，但依然要过所有层。
-# 因此其实二者结果是一样的，但是这种就花费很多时间！
+# Why use cached embeddings?
+# BertClassifier with freeze_bert=True:
+# Although all BERT parameters are set to requires_grad=False to disable gradient computation and backpropagation, each batch still requires a full forward pass through BERT using the input input_ids and attention_mask.
+# Even when wrapped in torch.no_grad(), the computational cost remains similar to standard fine-tuning, only gradients are not calculated.
+# If using cached results, the outcomes are effectively the same!
 
 def tokenize_batch(batch_text, tokenizer, max_length=128, return_tensors=None):
     return tokenizer(

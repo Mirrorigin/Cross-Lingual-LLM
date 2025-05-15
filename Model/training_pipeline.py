@@ -63,7 +63,7 @@ class AdapterBertClassifier(nn.Module):
         super().__init__()
         # Load Adapter-support model
         self.bert = AutoAdapterModel.from_pretrained(model_name)
-        # 增加一个 Pfeiffer Adapter
+        # Add Pfeiffer Adapter
         config = AdapterConfig.load("pfeiffer", reduction_factor=reduction)
         self.bert.add_adapter(adapter_name, config=config)
         self.bert.train_adapter(adapter_name)
@@ -89,10 +89,10 @@ class AdapterBertClassifier(nn.Module):
             return {"loss": loss, "logits": logits}
         return logits
 
-# LoRA 的核心在于把低秩适配器（adapter）插入到 Transformer 各层的权重矩阵里
-# 每次 forward 都要把整个 backbone（主干）跑一遍，才能把这些 adapter 的影响（即新参数）融入到输出中—
-# 即便把原始权重全部冻结不更新，也一样要执行那一大串矩阵乘加运算。只有这样，adapter 学到的新“微调”特征才会反映到 CLS 向量里
-# 否则就只能得到一个跟原始 BERT 完全一样的 embedding，达不到微调效果。
+# Core idea of LoRA: insert low-rank adapters into the weight matrices of each layer in the Transformer.
+# During each forward pass, the entire backbone must still be run in order to incorporate the effects of these adapters (i.e., the new parameters) into the output!
+# Even if the original weights are completely frozen and not updated, the full series of matrix multiplications and additions still has to be executed.
+# Only in this way can the fine-tuned features learned by the adapter be reflected in the CLS vector. Otherwise, the result would just be the same as the original BERT embedding, without any fine-tuning effect.
 class LoRABertClassifier(nn.Module):
     def __init__(self, model_name: str = "bert-base-multilingual-uncased", dropout_prob = 0.1,
                  lora_r = 16, lora_alpha = 32, lora_dropout = 0.0):
@@ -156,7 +156,7 @@ def train_model(model, dataloader, optimizer, criterion, device, *, timeit=False
 
         loss = criterion(logits, labels)
         loss.backward()
-        # 梯度裁剪操作 - 保持梯度方向不变，但缩小其长度：防止梯度爆炸
+        # Gradient clipping: keeping the direction of the gradient unchanged, but reducing its magnitude to prevent gradient explosion
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
         total_loss += loss.item()

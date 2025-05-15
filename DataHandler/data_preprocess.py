@@ -198,7 +198,7 @@ def main():
 
     douban_df = douban_df_bal
 
-    # Basic Clean (for bert): 只去 HTML/URL、合并空白，保留标点/大小写/停用词
+    # Basic Clean (for bert): Only remove HTML/URL, Merge whitespace, retain punctuation, casing, and stopwords.
     imdb_df = clean_dataset(imdb_df, language="en", deep = False, verbose=VERBOSE)
     douban_df = clean_dataset(douban_df, language="zh", deep=False, verbose=VERBOSE)
 
