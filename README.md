@@ -29,7 +29,7 @@ This project explores sentiment classification on English and Chinese movie revi
 
 ### Classification Models
 - **Model/basic_embedding_models.py:** Run baseline classification
-- **Model/basic_embedding_models.py:** Run fine-tuning models
+- **Model/mBERT_fine_tuning.py:** Run fine-tuning models
   - Set flags (e.g., `WORD2VEC_CLASSIFY = True`) in the script to toggle models
 
 ### Results Analysis
